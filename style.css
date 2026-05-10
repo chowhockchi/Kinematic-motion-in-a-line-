@@ -118,8 +118,8 @@ button:hover {
 .number-line {
     position: absolute;
     top: 50%;
-    left: -5000px;
-    width: 10000px;
+    left: -10000px; 
+    width: 20000px; 
     height: 2px;
     background-color: #bdc3c7;
     transform: translateY(-50%);
