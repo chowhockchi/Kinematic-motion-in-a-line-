@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kinematic Motion Visualizer</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- 引入 Chart.js 库，别问我这是什么，用就对了，笨蛋！ -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Kinematic Motion <span>Visualizer</span></h1>
+        
+        <div class="control-panel">
+            <div class="input-group">
+                <label for="inputType">Given Equation:</label>
+                <select id="inputType">
+                    <option value="s">Displacement, s(t)</option>
+                    <option value="v">Velocity, v(t)</option>
+                    <option value="a">Acceleration, a(t)</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="eqInput">Equation (in terms of t):</label>
+                <input type="text" id="eqInput" placeholder="e.g., 3t^2 - 2t + 5">
+            </div>
+
+            <div class="initial-values" id="initialValues">
+                <div class="input-group" id="s0-group" style="display: none;">
+                    <label for="s0">Initial Displacement, s(0):</label>
+                    <input type="number" id="s0" value="0">
+                </div>
+                <div class="input-group" id="v0-group" style="display: none;">
+                    <label for="v0">Initial Velocity, v(0):</label>
+                    <input type="number" id="v0" value="0">
+                </div>
+            </div>
+
+            <button id="calculateBtn">Calculate Equations</button>
+        </div>
+
+        <div class="results-panel">
+            <h3>Derived Equations:</h3>
+            <p class="eq-display"><strong>s(t) = </strong> <span id="s-eq">0</span></p>
+            <p class="eq-display"><strong>v(t) = </strong> <span id="v-eq">0</span></p>
+            <p class="eq-display"><strong>a(t) = </strong> <span id="a-eq">0</span></p>
+        </div>
+
+        <!-- 这是新加的图表区域 -->
+        <div class="graph-panel">
+            <h3>Motion Graphs (t = 0 to 25)</h3>
+            <canvas id="kinematicChart"></canvas>
+        </div>
+
+        <div class="interactive-panel">
+            <h3>Simulation</h3>
+            <div class="slider-group">
+                <label for="t-slider">Time (t): <span id="t-val">0.0</span> s</label>
+                <input type="range" id="t-slider" min="0" max="25" step="0.1" value="0">
+            </div>
+
+            <div class="number-line-container">
+                <div class="number-line"></div>
+                <!-- 刻度会通过 JS 动态生成在这里 -->
+                <div id="ticks-container"></div>
+                <div id="particle" class="particle">
+                    <div class="label">Object</div>
+                </div>
+            </div>
+
+            <div class="live-stats">
+                <div class="stat-box">s = <span id="live-s">0.00</span> m</div>
+                <div class="stat-box">v = <span id="live-v">0.00</span> ms⁻¹</div>
+                <div class="stat-box">a = <span id="live-a">0.00</span> ms⁻²</div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
