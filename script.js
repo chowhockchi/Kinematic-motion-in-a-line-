@@ -15,7 +15,8 @@ const DOM = {
     liveS: document.getElementById('live-s'),
     liveV: document.getElementById('live-v'),
     liveA: document.getElementById('live-a'),
-    ticksContainer: document.getElementById('ticks-container')
+    ticksContainer: document.getElementById('ticks-container'),
+    world: document.getElementById('world'),
 };
 
 let currentS = {}, currentV = {}, currentA = {};
@@ -26,20 +27,19 @@ const centerOffset = 50; // 数轴中心点在 50%
 // 初始化数轴刻度 (-100 到 100，每隔 20 标一个刻度)
 function drawTicks() {
     DOM.ticksContainer.innerHTML = '';
-    // 假设位移通常在 -250 到 250 之间比较好观察
-    for (let i = -250; i <= 250; i += 50) {
-        let posPercentage = centerOffset + (i * pixelScale / DOM.ticksContainer.parentElement.clientWidth) * 100;
-        if (posPercentage >= 0 && posPercentage <= 100) {
-            let tick = document.createElement('div');
-            tick.className = 'tick';
-            tick.style.left = `${posPercentage}%`;
-            let label = document.createElement('div');
-            label.className = 'tick-label';
-            label.style.left = `${posPercentage}%`;
-            label.textContent = i;
-            DOM.ticksContainer.appendChild(tick);
-            DOM.ticksContainer.appendChild(label);
-        }
+    // 画一个足够宽的范围：从 -2000 到 2000，绝对够你跑的了！
+    for (let i = -2000; i <= 2000; i += 50) {
+        let tick = document.createElement('div');
+        tick.className = 'tick';
+        tick.style.left = `${i * pixelScale}px`; // 现在刻度是相对于 world 的绝对位置
+        
+        let label = document.createElement('div');
+        label.className = 'tick-label';
+        label.style.left = `${i * pixelScale}px`;
+        label.textContent = i;
+        
+        DOM.ticksContainer.appendChild(tick);
+        DOM.ticksContainer.appendChild(label);
     }
 }
 
@@ -229,8 +229,12 @@ function updateSimulation() {
     DOM.liveV.textContent = v.toFixed(2);
     DOM.liveA.textContent = a.toFixed(2);
 
-    // 计算小球在数轴上的位置
-    DOM.particle.style.left = `calc(${centerOffset}% + ${s * pixelScale}px)`;
+    // 【高阶操作看好了！】
+    // 1. 小球在 world 里面乖乖根据 s 移动
+    DOM.particle.style.transform = `translate(calc(-50% + ${s * pixelScale}px), -50%)`;
+    
+    // 2. 镜头 (world) 朝着相反方向移动，抵消位移，让小球永远居中！
+    DOM.world.style.transform = `translateX(${-s * pixelScale}px)`;
 }
 
 // 初始化
